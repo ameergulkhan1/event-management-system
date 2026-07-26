@@ -1,2 +1,3 @@
-﻿// This file is the entry point for Vercel
-module.exports = require('./api/index.js');
+﻿// Entry point for Vercel
+const app = require('./api/index.js');
+module.exports = app;
