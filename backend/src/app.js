@@ -24,9 +24,7 @@ if (config.nodeEnv === 'development') {
   app.use(morgan('dev'));
 }
 
-// ============================================
-// CORS - FULLY OPEN (Allow all origins)
-// ============================================
+// CORS - Allow all
 app.use(cors({
     origin: '*',
     credentials: true,
@@ -46,13 +44,22 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Rate limiting
 app.use('/api', limiter);
 
+// Health check
+app.get('/api/health', (req, res) => {
+    res.json({
+        success: true,
+        message: 'Backend is running',
+        timestamp: new Date().toISOString()
+    });
+});
+
 // Welcome route
-app.get('/', (req, res) => {
-  res.json({
-    success: true,
-    message: 'Welcome to EventHub API',
-    version: '1.0.0',
-  });
+app.get('/api', (req, res) => {
+    res.json({
+        success: true,
+        message: 'Welcome to EventHub API',
+        version: '1.0.0',
+    });
 });
 
 // API routes
@@ -64,7 +71,7 @@ app.use('/api/users', userRoutes);
 
 // Handle undefined routes
 app.all('*', (req, res, next) => {
-  next(new AppError(`Cannot find ${req.originalUrl} on this server`, 404));
+    next(new AppError(`Cannot find ${req.originalUrl} on this server`, 404));
 });
 
 // Error handling middleware
