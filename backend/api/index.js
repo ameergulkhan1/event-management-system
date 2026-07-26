@@ -3,7 +3,6 @@ const cors = require('cors');
 const helmet = require('helmet');
 const dotenv = require('dotenv');
 
-// Load environment variables
 dotenv.config();
 
 // Import routes
@@ -55,7 +54,7 @@ app.use('/api/users', userRoutes);
 
 // Handle 404
 app.all('*', (req, res, next) => {
-    next(new AppError(`Cannot find ${req.originalUrl} on this server!`, 404));
+    next(new AppError(Cannot find  on this server, 404));
 });
 
 // Error handler
