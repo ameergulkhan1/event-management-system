@@ -26,3 +26,8 @@ dist-ssr
 
 .vercel
 .env*
+# Vercel
+.vercel
+vercel.json
+.env.local
+.vercelignore
