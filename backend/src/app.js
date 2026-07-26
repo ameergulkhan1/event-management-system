@@ -24,38 +24,18 @@ if (config.nodeEnv === 'development') {
   app.use(morgan('dev'));
 }
 
-// CORS Configuration (ALLOW ALL for production)
-const corsOptions = {
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        
-        // List of allowed origins
-        const allowedOrigins = [
-            '
-backend-events-67fp6ea49-ameergulkhan1s-projects.vercel.app',
-            'https://eventhub-frontend.vercel.app',
-            'https://eventhub-frontend-n4wgaqybe-ameergulkhan1s-projects.vercel.app',
-            'http://localhost:5173',
-            'http://localhost:3000'
-        ];
-        
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            console.log('Blocked by CORS:', origin);
-            // Allow all origins for production (remove this in production)
-            callback(null, true);
-        }
-    },
+// ============================================
+// CORS - FULLY OPEN (Allow all origins)
+// ============================================
+app.use(cors({
+    origin: '*',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
-};
+}));
 
 // Security middleware
 app.use(helmet());
-app.use(cors(corsOptions));
 app.use(xss());
 app.use(compression());
 
