@@ -7,7 +7,7 @@ const dotenv = require('dotenv');
 // Load environment variables
 dotenv.config();
 
-// Import routes (note: ../src because we're in api/)
+// Import routes
 const authRoutes = require('../src/routes/authRoutes');
 const eventRoutes = require('../src/routes/eventRoutes');
 const registrationRoutes = require('../src/routes/registrationRoutes');
@@ -55,9 +55,9 @@ app.use('/api/registrations', registrationRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/users', userRoutes);
 
-// Handle 404
+// Handle 404 - FIXED
 app.all('*', (req, res, next) => {
-    next(new AppError(Cannot find  on this server, 404));
+  next(new AppError(`Cannot find ${req.originalUrl} on this server`, 404));
 });
 
 // Error handler
