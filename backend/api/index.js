@@ -1,11 +1,13 @@
 ﻿const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const compression = require('compression');
 const dotenv = require('dotenv');
 
+// Load environment variables
 dotenv.config();
 
-// Import routes
+// Import routes (note: ../src because we're in api/)
 const authRoutes = require('../src/routes/authRoutes');
 const eventRoutes = require('../src/routes/eventRoutes');
 const registrationRoutes = require('../src/routes/registrationRoutes');
@@ -24,6 +26,7 @@ app.use(cors({
     origin: process.env.FRONTEND_URL || '*',
     credentials: true
 }));
+app.use(compression());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
