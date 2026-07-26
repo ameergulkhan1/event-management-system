@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "eventhub-backend",
   "version": "1.0.0",
   "description": "EventHub Backend API",
@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node api/index.js",
     "dev": "nodemon server.js",
-    "build": "echo 'No build step required'",
-    "vercel-build": "echo 'No build step required'"
+    "build": "echo 'No build step required'"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

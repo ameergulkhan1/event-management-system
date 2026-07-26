@@ -1,4 +1,3 @@
-﻿# Node.js
 node_modules/
 npm-debug.log*
 yarn-debug.log*
@@ -10,14 +9,13 @@ yarn.lock
 .env
 .env.local
 .env.*.local
-.env.production
-.env.development
 
 # Build files
 dist/
 build/
-.vercel/
-.vercel_build_output/
+.next/
+out/
+*.zip
 
 # IDE files
 .vscode/
@@ -25,7 +23,7 @@ build/
 *.swp
 *.swo
 *~
-*.iml
+.DS_Store
 
 # OS files
 Thumbs.db
@@ -33,25 +31,11 @@ Thumbs.db
 *.log
 
 # Vercel
-.vercel
-.vercelignore
+.vercel/
+.vercel_build_output/
 
-# Database
-*.sqlite
-*.db
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Temporary files
-tmp/
-temp/
-*.tmp
-
-# Coverage
+# Misc
 coverage/
 .nyc_output/
+.cache/
+.parcel-cache/
