@@ -24,7 +24,7 @@ if (config.nodeEnv === 'development') {
   app.use(morgan('dev'));
 }
 
-// CORS Configuration (UPDATED)
+// CORS Configuration (ALLOW ALL for production)
 const corsOptions = {
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
@@ -32,8 +32,10 @@ const corsOptions = {
         
         // List of allowed origins
         const allowedOrigins = [
-            'https://eventhub-frontend-8sxud4ura-ameergulkhan1s-projects.vercel.app',
+            '
+backend-events-67fp6ea49-ameergulkhan1s-projects.vercel.app',
             'https://eventhub-frontend.vercel.app',
+            'https://eventhub-frontend-n4wgaqybe-ameergulkhan1s-projects.vercel.app',
             'http://localhost:5173',
             'http://localhost:3000'
         ];
@@ -42,7 +44,8 @@ const corsOptions = {
             callback(null, true);
         } else {
             console.log('Blocked by CORS:', origin);
-            callback(null, true); // Allow all for now (or use false to block)
+            // Allow all origins for production (remove this in production)
+            callback(null, true);
         }
     },
     credentials: true,
@@ -52,7 +55,7 @@ const corsOptions = {
 
 // Security middleware
 app.use(helmet());
-app.use(cors(corsOptions)); // ← Updated CORS
+app.use(cors(corsOptions));
 app.use(xss());
 app.use(compression());
 
