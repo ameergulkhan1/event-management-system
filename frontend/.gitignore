@@ -56,3 +56,4 @@ temp/
 *.pid
 *.seed
 *.pid.lock
+.vercel
