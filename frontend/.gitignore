@@ -12,7 +12,10 @@ yarn.lock
 .env.*.local
 .env.production
 .env.development
+.env.production
+.env.development
 .env.staging
+.env.test
 
 # Build files
 dist/
@@ -56,4 +59,13 @@ temp/
 *.pid
 *.seed
 *.pid.lock
-.vercel
+
+# Database
+*.sqlite
+*.db
+
+# Production and Development specific
+*.production.*
+*.development.*
+*.env.production.local
+*.env.development.local
