@@ -1,3 +1,4 @@
+# Node.js
 node_modules/
 npm-debug.log*
 yarn-debug.log*
@@ -9,6 +10,10 @@ yarn.lock
 .env
 .env.local
 .env.*.local
+.env.production
+.env.development
+.env.staging
+.env.test
 
 # Build files
 dist/
@@ -33,11 +38,31 @@ Thumbs.db
 # Vercel
 .vercel/
 .vercel_build_output/
+.vercel
 
 # Misc
 coverage/
 .nyc_output/
 .cache/
 .parcel-cache/
-.vercel
-.env*
+
+# Production and Deployment files
+*.production.*
+*.deployment.*
+deploy/
+deployment/
+*.deploy
+*.prod
+*.prod.*
+production/
+prod/
+
+# Environment specific
+*.production.local
+*.development.local
+*.staging.local
+*.test.local
+
+# Lock files
+*.lock
+.lock/
