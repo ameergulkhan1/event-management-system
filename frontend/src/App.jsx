@@ -4,7 +4,7 @@ import Signup from './pages/auth/Signup.jsx'
 import StudentDashboard from './pages/StudentDashboard.jsx'
 import OrganizerDashboard from './pages/OrganizerDashboard.jsx'
 import AdminDashboard from './pages/AdminDashboard.jsx'
-
+import Homepage from './pages/Home/Homepage.jsx'
 import ChatbotWidget from './components/ChatbotWidget.jsx'
 import './App.css'
 
@@ -19,7 +19,9 @@ export default function App() {
   return (
     <>
       <Routes>
-        <Route path='/' element={<Navigate to='/login' replace />} />
+        {/* Fixed: Route path should be lowercase 'homepage' to match the component path */}
+        <Route path='/' element={<Navigate to='/homepage' replace />} />
+        <Route path='/homepage' element={<Homepage />} />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/student/dashboard' element={
