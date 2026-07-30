@@ -20,7 +20,6 @@ class RateLimiter {
     const data = this.requests.get(ip);
     
     if (now > data.resetTime) {
-      // Reset if window has passed
       data.count = 1;
       data.resetTime = now + this.windowMs;
       this.requests.set(ip, data);
@@ -37,7 +36,6 @@ class RateLimiter {
     return false;
   }
 
-  // Clean up old entries periodically
   cleanup() {
     const now = Date.now();
     for (const [ip, data] of this.requests.entries()) {
@@ -54,6 +52,7 @@ const rateLimiter = new RateLimiter();
 // Cleanup every 15 minutes
 setInterval(() => rateLimiter.cleanup(), 15 * 60 * 1000);
 
+// General limiter
 const limiter = (req, res, next) => {
   const ip = req.ip || req.connection.remoteAddress || 'unknown';
   
@@ -67,36 +66,40 @@ const limiter = (req, res, next) => {
   next();
 };
 
+// Auth limiter - FIXED
 const authLimiter = (req, res, next) => {
-  // Stricter limits for auth endpoints
   const ip = req.ip || req.connection.remoteAddress || 'unknown';
-  
-  // Custom auth rate limiter - 5 attempts per hour
-  const authLimiter = new Map();
   const windowMs = 60 * 60 * 1000; // 1 hour
   const maxAttempts = 5;
   
-  const now = Date.now();
+  // Use the same rate limiter instance or create a separate one
+  // Fixed: Using a static Map outside the function
+  if (!authLimiter.attempts) {
+    authLimiter.attempts = new Map();
+  }
   
-  if (!authLimiter.has(ip)) {
-    authLimiter.set(ip, {
+  const now = Date.now();
+  const attempts = authLimiter.attempts;
+  
+  if (!attempts.has(ip)) {
+    attempts.set(ip, {
       count: 1,
       resetTime: now + windowMs
     });
     return next();
   }
   
-  const data = authLimiter.get(ip);
+  const data = attempts.get(ip);
   
   if (now > data.resetTime) {
     data.count = 1;
     data.resetTime = now + windowMs;
-    authLimiter.set(ip, data);
+    attempts.set(ip, data);
     return next();
   }
   
   data.count++;
-  authLimiter.set(ip, data);
+  attempts.set(ip, data);
   
   if (data.count > maxAttempts) {
     return res.status(429).json({
