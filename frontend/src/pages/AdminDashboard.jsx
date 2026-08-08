@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import ChatbotWidget from '../components/ChatbotWidget';
 import Sidebar from '../components/Sidebar'
 import { apiGetUsers, apiDeleteUser, apiGetStats } from '../services/adminApi.js'
-import { apiAdminGetAllEvents, apiDeleteEvent, apiApproveEvent, apiRejectEvent } from '../services/eventApi.js'
+import { apiGetEvents, apiDeleteEvent, apiApproveEvent, apiRejectEvent } from '../services/eventApi.js'
 import { apiGetFeedback } from '../services/feedbackApi.js'
 import '../App.css'
 
@@ -24,48 +24,12 @@ export default function AdminDashboard() {
   const load = async () => {
     setLoading(true)
     try {
-      // Get users
-      let us = { users: [] };
-      try {
-        us = await apiGetUsers();
-        setUsers(us.users || us || []);
-      } catch (err) {
-        console.error('Failed to get users:', err);
-        setUsers([]);
-      }
-      
-      // Get ALL events (admin) - NOT just approved
-      let ev = { events: [] };
-      try {
-        ev = await apiAdminGetAllEvents();
-        setEvents(ev.events || ev || []);
-      } catch (err) {
-        console.error('Failed to get events:', err);
-        setEvents([]);
-      }
-      
-      // Get feedback
-      let fb = { feedbacks: [] };
-      try {
-        fb = await apiGetFeedback();
-        setFbs(fb.feedbacks || fb || []);
-      } catch (err) {
-        console.error('Failed to get feedback:', err);
-        setFbs([]);
-      }
-      
-      // Get stats
-      let st = {};
-      try {
-        st = await apiGetStats();
-        setStats(st);
-      } catch (err) {
-        console.error('Failed to get stats:', err);
-        setStats({});
-      }
-    } catch (err) {
-      console.error('Load error:', err);
-    }
+      const [us, ev, fb, st] = await Promise.all([apiGetUsers(), apiGetEvents(), apiGetFeedback(), apiGetStats()])
+      setUsers(us.users || us)
+      setEvents(ev.events || ev)
+      setFbs(fb.feedbacks || fb)
+      setStats(st)
+    } catch { /* handle */ }
     setLoading(false)
   }
 
@@ -103,7 +67,7 @@ export default function AdminDashboard() {
     ev.title?.toLowerCase().includes(evSearch.toLowerCase()) ||
     ev.organizer?.toLowerCase().includes(evSearch.toLowerCase())
   )
-  const pendingEvents = events.filter(e => e.status === 'pending' || !e.status)
+  const pendingEvents = events.filter(e => !e.status || e.status === 'pending')
 
   const sidebarStats = [
     ['Users', users.length],
@@ -134,7 +98,7 @@ export default function AdminDashboard() {
       <div className='main'>
         <div className='topbar'>
           <div>
-            <div className='topbar__eyebrow'>University Event Management System</div>
+            <div className='topbar__eyebrow'>Tamasha</div>
             <div className='topbar__title'>{active}</div>
           </div>
           <div className='topbar__badge'>
@@ -198,9 +162,8 @@ export default function AdminDashboard() {
                     <div key={ev.id} style={{ borderBottom: '1px solid var(--border)', padding: '10px 0' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                         <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', fontFamily: 'Space Grotesk' }}>{ev.title}</span>
-                        {statusBadge(ev.status)}
                       </div>
-                      <div style={{ fontSize: 11, color: 'var(--text-4)', marginBottom: 8 }}>{ev.organizer || 'Unknown'} · {ev.date}</div>
+                      <div style={{ fontSize: 11, color: 'var(--text-4)', marginBottom: 8 }}>{ev.organizer} · {ev.date}</div>
                       <div style={{ display: 'flex', gap: 6 }}>
                         <button className='btn btn--success btn--sm' onClick={() => approveEvent(ev.id)}>Approve</button>
                         <button className='btn btn--danger btn--sm' onClick={() => rejectEvent(ev.id)}>Reject</button>
@@ -303,7 +266,6 @@ export default function AdminDashboard() {
                     <div className='event-card__desc'>{ev.description}</div>
                     <div className='event-card__info'>
                       <span className='event-card__info-item'>Date: <span>{ev.date}</span></span>
-                      <span className='event-card__info-item'>Time: <span>{ev.time || 'TBD'}</span></span>
                       <span className='event-card__info-item'>Venue: <span>{ev.venue}</span></span>
                       <span className='event-card__info-item'>Organizer: <span>{ev.organizer}</span></span>
                       {ev.capacity && <span className='event-card__info-item'>Capacity: <span>{ev.capacity}</span></span>}

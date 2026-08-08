@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { apiSignup, apiLogin } from "../../services/authApi.js";// Changed from '../api'
+import { apiSignup } from "../../services/authApi.js"// Changed from '../api'
 import "../../App.css";                // Changed from '../App.css'
 
 const roles = [
   { value: 'student',   icon: '🎓', label: 'Student' },
-  { value: 'organizer', icon: '📋', label: 'Organizer' },];
+  { value: 'organizer', icon: '📋', label: 'Organizer' },
+
+]
 
 export default function Signup() {
   const [form, setForm]       = useState({ fullName: '', email: '', password: '', confirm: '', role: '' })
@@ -21,7 +23,28 @@ export default function Signup() {
     setError('')
     if (!form.role)                         return setError('Please select your role.')
     if (form.password !== form.confirm)      return setError('Passwords do not match.')
-    if (form.password.length < 6)           return setError('Password must be at least 6 characters.')
+    if (form.password.length < 8)           return setError('Password must be at least 8 characters.')
+      
+      // 5. At least one uppercase letter
+    if (!/[A-Z]/.test(form.password)) {
+        return setError('Password must contain at least one uppercase letter.');
+    }
+
+      // 6. At least one lowercase letter
+    if (!/[a-z]/.test(form.password)) {
+        return setError('Password must contain at least one lowercase letter.');
+    }
+
+      // 7. At least one number
+    if (!/[0-9]/.test(form.password)) {
+        return setError('Password must contain at least one number.');
+    }
+
+      // 8. At least one special character
+    if (!/[!@#$%^&*(),.?":{}|<>\-_]/.test(form.password)) {
+        return setError('Password must contain at least one special character.');
+    }
+    
     setLoading(true)
     try {
       await apiSignup({ fullName: form.fullName, email: form.email, password: form.password, role: form.role })
@@ -66,7 +89,7 @@ export default function Signup() {
       <div className='auth-right'>
         <div className='auth-box'>
           <p className='auth-box__eyebrow'>Create Account</p>
-          <h2 className='auth-box__title'>Join EventManage</h2>
+          <h2 className='auth-box__title'>Join Tamasha</h2>
           <p className='auth-box__sub'>
             Already have an account? <Link to='/login'>Sign in</Link>
           </p>
@@ -100,7 +123,7 @@ export default function Signup() {
             <div className='form-group'>
               <label className='auth-form-label'>Password</label>
               <div style={{ position: 'relative' }}>
-                <input type={showPw ? 'text' : 'password'} value={form.password} onChange={set('password')} placeholder='Min. 6 characters' required className='auth-form-input' style={{ paddingRight: 52 }} />
+                <input type={showPw ? 'text' : 'password'} value={form.password} onChange={set('password')} placeholder='Min. 8 characters' required className='auth-form-input' style={{ paddingRight: 52 }} />
                 <button type='button' onClick={() => setShowPw(!showPw)} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#999', fontSize: '10px', fontWeight: 700, fontFamily: 'Space Grotesk' }}>
                   {showPw ? 'HIDE' : 'SHOW'}
                 </button>

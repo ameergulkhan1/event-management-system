@@ -20,7 +20,7 @@ const Sidebar = ({ tabs, active, setActive, user, stats, role }) => {
           <span>EM</span>
         </div>
         <div>
-          <div className="sidebar__logo-text">EventManage</div>
+          <div className="sidebar__logo-text">TAMASHA</div>
           <div className="sidebar__logo-sub">{role} portal</div>
         </div>
       </div>

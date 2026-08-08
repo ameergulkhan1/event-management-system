@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import "../Home/Homepage.css";
+
+import logo from "/tamasha-logo.png";
+// ✅ Best practice - always works
+import "./Homepage.css";
 
 // ── Intersection Observer Hook ──────────────────────────────────────────────
 function useInView(threshold = 0.15) {
@@ -99,6 +102,7 @@ function Counter({ target, suffix = "" }) {
   return <span ref={ref}>{count}{suffix}</span>;
 }
 
+
 // ── Navbar ──────────────────────────────────────────────────────────────────
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -117,13 +121,13 @@ function Navbar() {
       <div className="navbar__inner">
 
         {/* Logo */}
-        <div className="navbar__logo">
-          <div className="navbar__logo-box">
-            <span className="navbar__logo-letters">EM</span>
+        <Link to="/" className="navbar__logo">
+          <img src={logo} className="navbar__logo-img" alt="Tamasha Logo" />
+          <div className="navbar__logo-text-group">
+            <span className="navbar__logo-name">TAMASHA</span>
+            <span className="navbar__logo-slogan">INNOVATE • CONNECT • GROW</span>
           </div>
-          <span className="navbar__logo-name">Event Management</span>
-        </div>
-
+        </Link>
         {/* Desktop Links */}
         <div className="navbar__links">
           {links.map((link) => (
@@ -199,29 +203,23 @@ function HeroSection() {
       <div className="hero__grid-bg" />
       <div className="hero__glow" />
 
-      {/* Eyebrow */}
+      {/* Eyebrow Slogan */}
       <div className={`hero__eyebrow ${subtitleVisible ? "hero__eyebrow--visible" : "hero__eyebrow--hidden"}`}>
         <span className="hero__eyebrow-line" />
-        <span className="hero__eyebrow-text">UNIVERSITY EVENT PLATFORM</span>
+        <span className="hero__eyebrow-text">INNOVATE • CONNECT • GROW</span>
         <span className="hero__eyebrow-line" />
       </div>
 
       {/* Animated Title */}
       <div className="hero__title-wrap">
         <h1 className="hero__title-line">
-          <AnimatedTitle text="EVENT" delay={100} />
-        </h1>
-        <h1 className="hero__title-line">
-          <AnimatedTitle text="MANAGEMENT" delay={500} />
-        </h1>
-        <h1 className="hero__title-line">
-          <AnimatedTitle text="SYSTEM" delay={950} />
+          <AnimatedTitle text="TAMASHA" delay={100} />
         </h1>
       </div>
 
       {/* Subtitle */}
       <p className={`hero__subtitle ${subtitleVisible ? "hero__subtitle--visible" : "hero__subtitle--hidden"}`}>
-        One platform for students and organizers to discover, create, and manage university events — seamlessly.
+        The modern university event platform for students and organizers to discover, innovate, and connect seamlessly.
       </p>
 
       {/* CTA Buttons */}
@@ -407,7 +405,6 @@ function FeaturesStrip() {
       title: "Secure by Default",
       desc: "JWT authentication, encrypted passwords, and role-based access control built in.",
     },
-
     {
       icon: "💬",
       title: "Feedback System",
@@ -450,10 +447,10 @@ function CTABanner() {
       >
         <p className="cta-banner__eyebrow">JOIN TODAY</p>
         <h2 className="cta-banner__heading">
-          Your University.<br />Your Events.
+          Your Campus.<br />Your Events.
         </h2>
         <p className="cta-banner__sub">
-          Join thousands of students already using the platform to stay connected, participate in events, and shape university culture.
+          Join thousands of students using TAMASHA to stay connected, innovate, and shape university culture.
         </p>
         <div className="cta-banner__buttons">
           <Link to="/signup" className="btn-dark">CREATE ACCOUNT →</Link>
@@ -476,13 +473,15 @@ function Footer() {
           {/* Brand */}
           <div>
             <div className="footer__brand-logo">
-              <div className="navbar__logo-box">
-                <span className="navbar__logo-letters">EM</span>
+            <img src="/tamasha-logo.png" className="footer__logo-img" alt="Tamasha Logo" />
+
+              <div className="navbar__logo-text-group">
+                <span className="footer__logo-name">TAMASHA</span>
+                <span className="footer__logo-slogan">INNOVATE • CONNECT • GROW</span>
               </div>
-              <span className="navbar__logo-name">Event Management</span>
             </div>
             <p className="footer__brand-desc">
-              The all-in-one event management platform for universities and colleges.
+              The premier event management platform to innovate, connect, and grow campus communities.
             </p>
           </div>
 
@@ -507,7 +506,7 @@ function Footer() {
         </div>
 
         <div className="footer__bottom">
-          <p>©{date.getFullYear()} University Event Management System. All rights reserved.</p>
+          <p>©{date.getFullYear()} TAMASHA. All rights reserved.</p>
         </div>
       </div>
     </footer>
@@ -526,6 +525,6 @@ export default function Home() {
       <FeaturesStrip />
       <CTABanner />
       <Footer />
-    </> 
+    </>
   );
-} 
+}
