@@ -2,11 +2,9 @@ name: Deploy Frontend to Hostinger
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
       - 'frontend/**'
-  workflow_dispatch:
 
 jobs:
   deploy:
@@ -29,16 +27,14 @@ jobs:
         working-directory: ./frontend
         run: npm run build
 
-      - name: Deploy to Hostinger via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v0.1.5
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./frontend/dist/
-          server-dir: ${{ secrets.FTP_PATH }}
-          exclude: |
-            .git*
-            node_modules/
-            .env*
-            *.log
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          script: |
+            cd ${{ secrets.FRONTEND_PATH }}
+            rm -rf assets index.html vite.svg
+            cp -r ${{ github.workspace }}/frontend/dist/* .
